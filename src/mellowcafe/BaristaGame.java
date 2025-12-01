@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class BaristaGame extends JFrame {
 
     private javax.swing.Timer orderTimer;
-    private int timeRemaining = 60;
+    private int timeRemaining = 20;
     private JLabel timerLabel;
     private JProgressBar timerBar;
     private int streak = 0;
@@ -51,22 +51,23 @@ public class BaristaGame extends JFrame {
     private JPanel recipePanel;
 
     public BaristaGame(int userID, String username) {
-        this.userID = userID;
-        this.username = username;
+    this.userID = userID;
+    this.username = username;
 
-        setTitle("Cafe Au Mello - Barista Station");
-        setSize(1400, 820);
-        setLocationRelativeTo(null);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setLayout(new BorderLayout());
+    setTitle("Cafe Au Mello - Barista Station");
+    setSize(1400, 820);
+    setLocationRelativeTo(null);
+    setDefaultCloseOperation(EXIT_ON_CLOSE);
+    setLayout(new BorderLayout());
 
-        connectDB();
-        loadCurrentPoints();
-        initializeUI();
-        loadPendingOrders();
+    connectDB();
+    loadCurrentPoints();
+    initializeUI();           // Create UI first
+    loadPendingOrders();      // Then load orders
+    updateHeaderAfterLoad();  // Then update header
 
-        setVisible(true);
-    }
+    setVisible(true);
+}
 
     private void initializeUI() {
         JPanel mainContainer = new JPanel(new BorderLayout());
@@ -90,11 +91,6 @@ public class BaristaGame extends JFrame {
         gameArea.add(rightPanel, BorderLayout.EAST);
 
         mainContainer.add(gameArea, BorderLayout.CENTER);
-
-        // Check if cafe is empty after loading
-        if (activeOrders.isEmpty()) {
-            SwingUtilities.invokeLater(() -> showEmptyCafeMessage());
-        }
     }
 
 private JPanel createHeader() {
@@ -131,8 +127,8 @@ private JPanel createHeader() {
     timerLabel.setForeground(ACCENT_BLUE);
     timerLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-    timerBar = new JProgressBar(0, 60);
-    timerBar.setValue(60);
+    timerBar = new JProgressBar(0, 20);
+    timerBar.setValue(20);
     timerBar.setStringPainted(true);
     timerBar.setForeground(MINT_GREEN);
     timerBar.setBackground(LIGHT_PINK);
@@ -149,8 +145,6 @@ private JPanel createHeader() {
     if (!activeOrders.isEmpty()) {
         centerPanel.add(timerLabel);
         centerPanel.add(timerBar);
-    }else{
-        centerPanel.add(emptyLabel);
     }
 
     // Right panel with stats
@@ -236,6 +230,45 @@ private void updateGameTitle() {
     }
 }
 
+private void updateHeaderAfterLoad() {
+    Container contentPane = getContentPane();
+    Component[] components = contentPane.getComponents();
+    if (components.length > 0 && components[0] instanceof JPanel) {
+        JPanel mainContainer = (JPanel) components[0];
+        Component[] mainComps = mainContainer.getComponents();
+        if (mainComps.length > 0 && mainComps[0] instanceof JPanel) {
+            JPanel header = (JPanel) mainComps[0];
+            Component centerComp = ((BorderLayout) header.getLayout()).getLayoutComponent(BorderLayout.CENTER);
+            if (centerComp instanceof JPanel) {
+                JPanel centerPanel = (JPanel) centerComp;
+                centerPanel.removeAll();
+                
+                JLabel titleLabel = new JLabel(activeOrders.isEmpty() ? "QUIET HOURS..." : "RUSH HOUR!");
+                titleLabel.setFont(new Font("Franklin Gothic Demi", Font.BOLD, 32));
+                titleLabel.setForeground(activeOrders.isEmpty() ? ACCENT_BLUE : SOFT_RED);
+                titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+                
+                centerPanel.add(titleLabel);
+                centerPanel.add(Box.createRigidArea(new Dimension(0, 5)));
+                
+                if (!activeOrders.isEmpty()) {
+                    centerPanel.add(timerLabel);
+                    centerPanel.add(timerBar);
+                } else {
+                    JLabel emptyLabel = new JLabel("Go ahead and take a break!");
+                    emptyLabel.setFont(new Font("Century Gothic", Font.BOLD, 24));
+                    emptyLabel.setForeground(ACCENT_BLUE);
+                    emptyLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+                    centerPanel.add(emptyLabel);
+                }
+                
+                centerPanel.revalidate();
+                centerPanel.repaint();
+            }
+        }
+    }
+}
+
 private void startTimer() {
     orderTimer = new javax.swing.Timer(1000, e -> {
         timeRemaining--;
@@ -243,10 +276,10 @@ private void startTimer() {
         timerBar.setValue(timeRemaining);
         
         // Color changes based on urgency
-        if (timeRemaining <= 10) {
+        if (timeRemaining <= 5) {  // Adjust for 20 second timer
             timerBar.setForeground(SOFT_RED);
             timerLabel.setForeground(SOFT_RED);
-        } else if (timeRemaining <= 30) {
+        } else if (timeRemaining <= 10) {  // Adjust for 20 second timer
             timerBar.setForeground(new Color(255, 200, 100));
             timerLabel.setForeground(new Color(255, 140, 0));
         }
@@ -561,41 +594,46 @@ private void endGame() {
         return btn;
     }
 
-    private void loadPendingOrders() {
-        activeOrders.clear();
-        try {
-            String query = "SELECT o.orderID, o.item, u.username " +
-                    "FROM Orders o " +
-                    "JOIN Users u ON o.userID = u.userID " +
-                    "WHERE o.status = 'Preparing' AND o.total_price > 0 " +
-                    "ORDER BY o.orderID ASC";
-            Statement stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery(query);
+private void loadPendingOrders() {
+    activeOrders.clear();
+    try {
+        String query = "SELECT o.orderID, o.item, u.username " +
+                "FROM Orders o " +
+                "JOIN Users u ON o.userID = u.userID " +
+                "WHERE o.status = 'Preparing' AND o.total_price > 0 " +
+                "ORDER BY o.orderID ASC";
+        Statement stmt = con.createStatement();
+        ResultSet rs = stmt.executeQuery(query);
 
-            while (rs.next()) {
-                String drinkName = rs.getString("item");
-                String customerName = rs.getString("username");
-                int orderID = rs.getInt("orderID");
+        while (rs.next()) {
+            String drinkName = rs.getString("item");
+            String customerName = rs.getString("username");
+            int orderID = rs.getInt("orderID");
 
-                Order order = new Order(orderID, drinkName, customerName, getRecipe(drinkName));
-                activeOrders.add(order);
+            Order order = new Order(orderID, drinkName, customerName, getRecipe(drinkName));
+            activeOrders.add(order);
 
-                JPanel orderCard = createOrderCard(order);
-                ordersPanel.add(orderCard);
-                ordersPanel.add(Box.createRigidArea(new Dimension(0, 10)));
-            }
-
-            rs.close();
-            stmt.close();
-
-            ordersPanel.revalidate();
-            ordersPanel.repaint();
-            
-        } catch (Exception e) {
-            System.err.println("Error loading orders: " + e.getMessage());
-            e.printStackTrace();
+            JPanel orderCard = createOrderCard(order);
+            ordersPanel.add(orderCard);
+            ordersPanel.add(Box.createRigidArea(new Dimension(0, 10)));
         }
+
+        rs.close();
+        stmt.close();
+
+        ordersPanel.revalidate();
+        ordersPanel.repaint();
+        
+        // Only show "cafe empty" message when first opening the game
+        if (activeOrders.isEmpty()) {
+            SwingUtilities.invokeLater(() -> showEmptyCafeMessage());
+        }
+        
+    } catch (Exception e) {
+        System.err.println("Error loading orders: " + e.getMessage());
+        e.printStackTrace();
     }
+}
 
     private void showEmptyCafeMessage() {
     JOptionPane.showMessageDialog(this, 
@@ -757,7 +795,7 @@ private void endGame() {
 
          
                 timeRemaining += 5;
-                if (timeRemaining > 60) timeRemaining = 60;
+                if (timeRemaining > 20) timeRemaining = 20;
 
                 String bonusText = "";
                 if (streakBonus > 0) bonusText += "\n🔥 Streak Bonus: +" + streakBonus;
@@ -802,26 +840,38 @@ private void endGame() {
     }
 
     private void refreshOrdersPanel() {
-        ordersPanel.removeAll();
-        for (Order order : activeOrders) {
-            JPanel card = createOrderCard(order);
-            ordersPanel.add(card);
-            ordersPanel.add(Box.createRigidArea(new Dimension(0, 10)));
-        }
+    ordersPanel.removeAll();
+    for (Order order : activeOrders) {
+        JPanel card = createOrderCard(order);
+        ordersPanel.add(card);
+        ordersPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+    }
+    ordersPanel.revalidate();
+    ordersPanel.repaint();
+
+    if (activeOrders.isEmpty()) {
+        JLabel emptyLabel = new JLabel("No pending orders!");
+        emptyLabel.setFont(new Font("Century Gothic", Font.ITALIC, 16));
+        emptyLabel.setForeground(TEXT_PURPLE);
+        ordersPanel.add(emptyLabel);
         ordersPanel.revalidate();
         ordersPanel.repaint();
-
-            if (activeOrders.isEmpty()) {
-            JLabel emptyLabel = new JLabel("No pending orders!");
-            emptyLabel.setFont(new Font("Century Gothic", Font.ITALIC, 16));
-            emptyLabel.setForeground(TEXT_PURPLE);
-            ordersPanel.add(emptyLabel);
-            ordersPanel.revalidate();
-            ordersPanel.repaint();
-            showEmptyCafeMessage();
+        
+        // Stop the timer when all orders are done
+        if (orderTimer != null) {
+            orderTimer.stop();
         }
-            updateGameTitle();
+        
+        // Show different message when finishing all orders during game
+        SwingUtilities.invokeLater(() -> 
+            JOptionPane.showMessageDialog(this, 
+                "🎉 All orders completed! 🎉\n\nWaiting for more orders to prepare!",
+                "Great Work!", 
+                JOptionPane.INFORMATION_MESSAGE)
+        );
     }
+    updateGameTitle();
+}
 
     private void connectDB() {
         try {
