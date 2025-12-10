@@ -806,22 +806,26 @@ public class FriendsFrame extends JFrame {
         }
     }
     
-    private JPanel createBottomPanel() {
-        JPanel panel = new JPanel();
-        panel.setBackground(CREAM_WHITE);
-        panel.setBorder(new CompoundBorder(
-            BorderFactory.createLineBorder(Color.BLACK, 1),
-            BorderFactory.createEmptyBorder(20, 20, 20, 20)
-        ));
-        panel.setLayout(new FlowLayout(FlowLayout.LEFT));
-        
-        JButton backBtn = createStyledButton("← Back", BORDER_BLUE);
-        backBtn.addActionListener(e -> this.dispose());
-        
-        panel.add(backBtn);
-        
-        return panel;
-    }
+   private JPanel createBottomPanel() {
+    JPanel panel = new JPanel();
+    panel.setBackground(CREAM_WHITE);
+    panel.setBorder(new CompoundBorder(
+        BorderFactory.createLineBorder(Color.BLACK, 1),
+        BorderFactory.createEmptyBorder(20, 20, 20, 20)
+    ));
+    panel.setLayout(new FlowLayout(FlowLayout.LEFT));
+    
+    JButton backBtn = createStyledButton("← Back", BORDER_BLUE);
+    backBtn.addActionListener(e -> this.dispose());
+
+    JButton messagesBtn = createStyledButton("Messages", SOFT_PINK);
+    messagesBtn.addActionListener(e -> new MessagingFrame(userID, username).setVisible(true));
+    
+    panel.add(backBtn);
+    panel.add(messagesBtn);  // Add the button here
+    
+    return panel;
+}
     
     private JButton createStyledButton(String text, Color bgColor) {
         JButton btn = new JButton(text);
