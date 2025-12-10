@@ -9,7 +9,6 @@ public class RegisterFrame extends JFrame {
 
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(RegisterFrame.class.getName());
 
-    // Color palette (same as LoginFrame)
     private static final Color SOFT_PINK = new Color(255, 160, 190);
     private static final Color LIGHT_PINK = new Color(255, 244, 248);
     private static final Color SOFT_BLUE = new Color(229, 244, 255);
@@ -35,7 +34,6 @@ public class RegisterFrame extends JFrame {
         setPreferredSize(new Dimension(550, 600));
         setResizable(false);
 
-        // Main panel with gradient background
         JPanel mainPanel = new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
@@ -49,7 +47,6 @@ public class RegisterFrame extends JFrame {
         };
         mainPanel.setLayout(new GridBagLayout());
 
-        // Center card panel
         JPanel cardPanel = new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
@@ -68,7 +65,6 @@ public class RegisterFrame extends JFrame {
         cardPanel.setLayout(new BoxLayout(cardPanel, BoxLayout.Y_AXIS));
         cardPanel.setBorder(BorderFactory.createEmptyBorder(25, 35, 25, 35));
 
-        // --- Logo Panel (high-quality scaling, larger) ---
         ImageIcon icon = new ImageIcon(getClass().getResource("/mellowcafe/logo.png"));
         Image logoImage = icon.getImage();
         JLabel logoLabel = new JLabel() {
@@ -108,7 +104,6 @@ public class RegisterFrame extends JFrame {
         logoLabel.setMaximumSize(new Dimension(200, 200));
         logoLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // Username field
         JPanel usernamePanel = createInputPanel();
         JLabel userIcon = new JLabel("👤");
         userIcon.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 16));
@@ -121,7 +116,6 @@ public class RegisterFrame extends JFrame {
         usernamePanel.add(userIcon, BorderLayout.WEST);
         usernamePanel.add(usernameField, BorderLayout.CENTER);
 
-        // Email field
         JPanel emailPanel = createInputPanel();
         JLabel emailIcon = new JLabel("📧");
         emailIcon.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 16));
@@ -134,7 +128,6 @@ public class RegisterFrame extends JFrame {
         emailPanel.add(emailIcon, BorderLayout.WEST);
         emailPanel.add(emailField, BorderLayout.CENTER);
 
-        // Password field
         JPanel passwordPanel = createInputPanel();
         JLabel lockIcon = new JLabel("🔒");
         lockIcon.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 16));
@@ -147,7 +140,6 @@ public class RegisterFrame extends JFrame {
         passwordPanel.add(lockIcon, BorderLayout.WEST);
         passwordPanel.add(passwordField, BorderLayout.CENTER);
 
-        // Register button
         registerButton = new JButton("REGISTER") {
             @Override
             protected void paintComponent(Graphics g) {
@@ -177,7 +169,6 @@ public class RegisterFrame extends JFrame {
         registerButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         registerButton.addActionListener(e -> handleRegister());
 
-        // Already have account
         loginLabel = new JLabel("Already have an account? Login!");
         loginLabel.setFont(new Font("Segoe UI", Font.PLAIN, 11));
         loginLabel.setForeground(ACCENT_BLUE);
@@ -199,7 +190,6 @@ public class RegisterFrame extends JFrame {
             }
         });
 
-        // Add components
         cardPanel.add(logoLabel);
         cardPanel.add(Box.createVerticalStrut(20));
         cardPanel.add(usernamePanel);

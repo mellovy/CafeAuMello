@@ -10,14 +10,14 @@ import java.util.ArrayList;
 
 public class Cashier extends JFrame {
 
-    // UI Elements
+
     private JPanel ordersListPanel;
     private JLabel orderIDLabel, customerLabel, itemLabel, categoryLabel, priceLabel, qtyLabel, statusLabel;
     private JPanel selectedOrderBtn = null;
     private Connection con;
     private ArrayList<OrderData> orders = new ArrayList<>();
 
-    // Pastel colors matching LoginPage aesthetic
+   
     private final Color SOFT_PINK = new Color(255, 160, 190);
     private final Color LIGHT_PINK = new Color(255, 244, 248);
     private final Color CREAM_WHITE = new Color(252, 253, 255);
@@ -41,11 +41,11 @@ public class Cashier extends JFrame {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
-        // Connect to database
+
         connectDB();
         loadOrders();
 
-        // Main panel with pastel background matching LoginPage
+        
         JPanel mainPanel = new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
@@ -57,25 +57,25 @@ public class Cashier extends JFrame {
         mainPanel.setLayout(new BorderLayout(0, 0));
         add(mainPanel);
 
-        // Header with cafe sign
+        
         JPanel header = createHeaderPanel();
         mainPanel.add(header, BorderLayout.NORTH);
 
-        // Center content area
+        
         JPanel centerPanel = new JPanel(new GridLayout(1, 2, 20, 20));
         centerPanel.setOpaque(false);
         centerPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         mainPanel.add(centerPanel, BorderLayout.CENTER);
 
-        // LEFT: Orders list
+        
         JPanel leftPanel = createOrdersListPanel();
         centerPanel.add(leftPanel);
 
-        // RIGHT: Order details panel
+        
         JPanel rightPanel = createDetailsPanel();
         centerPanel.add(rightPanel);
 
-        // Bottom action buttons
+    
         JPanel bottomPanel = createBottomPanel();
         mainPanel.add(bottomPanel, BorderLayout.SOUTH);
 
@@ -108,7 +108,7 @@ public class Cashier extends JFrame {
     header.setBorder(BorderFactory.createEmptyBorder(15, 5, 15, 5));
     container.add(header, BorderLayout.NORTH);
     
-    // Scrollable orders list with padding wrapper
+  
     JPanel paddingWrapper = new JPanel(new BorderLayout());
     paddingWrapper.setBackground(CREAM_WHITE);
     paddingWrapper.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
@@ -117,13 +117,13 @@ public class Cashier extends JFrame {
     ordersListPanel.setLayout(new BoxLayout(ordersListPanel, BoxLayout.Y_AXIS));
     ordersListPanel.setBackground(CREAM_WHITE);
 
-    // Check if there are orders
+   
     if (orders.isEmpty()) {
-        // Show empty state message
+
         JPanel emptyStatePanel = createEmptyStatePanel();
         ordersListPanel.add(emptyStatePanel);
     } else {
-        // Add order buttons from database
+    
         for (OrderData order : orders) {
             JPanel orderBtn = createOrderButton(order);
             ordersListPanel.add(orderBtn);
@@ -151,13 +151,13 @@ public class Cashier extends JFrame {
     ));
     emptyPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 300));
     
-    // Main message
+ 
     JLabel messageLabel = new JLabel("No orders to calculate at this time..", JLabel.CENTER);
     messageLabel.setFont(new Font("Century Gothic", Font.BOLD, 18));
     messageLabel.setForeground(TEXT_PURPLE);
     messageLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
     
-    // Subtitle
+
     JLabel subtitleLabel = new JLabel("Check back soon for new orders!", JLabel.CENTER);
     subtitleLabel.setFont(new Font("Century Gothic", Font.ITALIC, 14));
     subtitleLabel.setForeground(new Color(150, 110, 120));
@@ -184,7 +184,7 @@ public class Cashier extends JFrame {
         btn.setMaximumSize(new Dimension(Integer.MAX_VALUE, 100));
         btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-        // Icon panel with fixed width for alignment
+        
         JPanel iconPanel = new JPanel();
         iconPanel.setLayout(new BorderLayout());
         iconPanel.setOpaque(false);
@@ -192,7 +192,7 @@ public class Cashier extends JFrame {
         iconPanel.setMinimumSize(new Dimension(80, 80));
         iconPanel.setMaximumSize(new Dimension(80, 80));
 
-        // Load appropriate icon based on category
+        
         String iconPath = "/mellowcafe/barista.png"; // default
         if (order.category != null) {
             if (order.category.equalsIgnoreCase("Pastry")) {
@@ -215,7 +215,7 @@ public class Cashier extends JFrame {
             System.err.println("Could not load icon: " + iconPath + " - " + e.getMessage());
         }
 
-        // Text panel
+
         JPanel textPanel = new JPanel();
         textPanel.setLayout(new BoxLayout(textPanel, BoxLayout.Y_AXIS));
         textPanel.setOpaque(false);
@@ -241,7 +241,7 @@ public class Cashier extends JFrame {
         btn.add(iconPanel, BorderLayout.WEST);
         btn.add(textPanel, BorderLayout.CENTER);
 
-        // Click handler
+
         btn.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 if (selectedOrderBtn != null) {
@@ -281,7 +281,7 @@ public class Cashier extends JFrame {
         header.setBorder(BorderFactory.createEmptyBorder(5, 5, 20, 5));
         panel.add(header);
 
-        // Detail fields
+  
         orderIDLabel = createDetailLabel("ORDER #", "---");
         customerLabel = createDetailLabel("CUSTOMER", "Select an order");
         itemLabel = createDetailLabel("ITEM", "---");
@@ -394,7 +394,7 @@ public class Cashier extends JFrame {
             return;
         }
         
-        // Find the selected order
+   
         OrderData selectedOrder = null;
         for (OrderData order : orders) {
             if (orderIDLabel.getText().contains(String.valueOf(order.id))) {
@@ -408,7 +408,7 @@ public class Cashier extends JFrame {
             return;
         }
         
-        // Show the calculation minigame dialog
+       
         showCalculationDialog(selectedOrder);
     }
 
@@ -418,13 +418,13 @@ public class Cashier extends JFrame {
         dialog.setLocationRelativeTo(this);
         dialog.setLayout(new BorderLayout());
         
-        // Main panel
+
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
         mainPanel.setBackground(PASTEL_BLUE);
         mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 30, 20, 30));
         
-        // Title
+    
         JLabel titleLabel = new JLabel("🧮 Cashier Challenge!");
         titleLabel.setFont(new Font("Century Gothic", Font.BOLD, 24));
         titleLabel.setForeground(SOFT_PINK);
@@ -432,7 +432,7 @@ public class Cashier extends JFrame {
         mainPanel.add(titleLabel);
         mainPanel.add(Box.createRigidArea(new Dimension(0, 20)));
         
-        // Instructions
+      
         JLabel instructionLabel = new JLabel("<html><center>Calculate the total cost for this order:</center></html>");
         instructionLabel.setFont(new Font("Century Gothic", Font.PLAIN, 16));
         instructionLabel.setForeground(TEXT_PURPLE);
@@ -440,7 +440,7 @@ public class Cashier extends JFrame {
         mainPanel.add(instructionLabel);
         mainPanel.add(Box.createRigidArea(new Dimension(0, 20)));
         
-        // Order info box
+      
         JPanel infoBox = new JPanel();
         infoBox.setLayout(new BoxLayout(infoBox, BoxLayout.Y_AXIS));
         infoBox.setBackground(CREAM_WHITE);
@@ -470,7 +470,7 @@ public class Cashier extends JFrame {
         mainPanel.add(infoBox);
         mainPanel.add(Box.createRigidArea(new Dimension(0, 20)));
         
-        // Input section
+
         JLabel answerLabel = new JLabel("Your Answer (₱):");
         answerLabel.setFont(new Font("Century Gothic", Font.BOLD, 16));
         answerLabel.setForeground(TEXT_PURPLE);
@@ -489,7 +489,7 @@ public class Cashier extends JFrame {
         mainPanel.add(answerField);
         mainPanel.add(Box.createRigidArea(new Dimension(0, 20)));
         
-        // Buttons panel
+      
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 0));
         buttonPanel.setOpaque(false);
         
@@ -508,18 +508,18 @@ public class Cashier extends JFrame {
                 double correctAnswer = order.price * order.quantity;
                 
                 if (Math.abs(userAnswer - correctAnswer) < 0.01) {
-                    // Correct answer!
+              
                     JOptionPane.showMessageDialog(dialog, 
                         String.format("✨ Correct! The total is ₱%.2f\n\nOrder updated successfully!", correctAnswer),
                         "🎉 Great Job!", 
                         JOptionPane.INFORMATION_MESSAGE);
                     
-                    // Update database
+                  
                     updateOrderTotal(order, correctAnswer);
                     dialog.dispose();
                     refreshOrders();
                 } else {
-                    // Wrong answer
+                    
                     JOptionPane.showMessageDialog(dialog, 
                         String.format("❌ Oops! That's not quite right.\n\nYour answer: ₱%.2f\nCorrect answer: ₱%.2f\n\nTry again!", 
                             userAnswer, correctAnswer),
@@ -535,15 +535,14 @@ public class Cashier extends JFrame {
         });
         
         cancelBtn.addActionListener(e -> dialog.dispose());
-        
-        // Allow Enter key to submit
+       
         answerField.addActionListener(e -> submitBtn.doClick());
         
         buttonPanel.add(submitBtn);
         buttonPanel.add(cancelBtn);
         mainPanel.add(buttonPanel);
         
-        // Wrap main panel in scroll pane for safety
+       
         JScrollPane scrollPane = new JScrollPane(mainPanel);
         scrollPane.setBorder(null);
         scrollPane.getVerticalScrollBar().setUnitIncrement(16);
@@ -572,13 +571,13 @@ public class Cashier extends JFrame {
     ordersListPanel.removeAll();
     selectedOrderBtn = null;
     
-    // Check if there are orders
+  
     if (orders.isEmpty()) {
-        // Show empty state message
+      
         JPanel emptyStatePanel = createEmptyStatePanel();
         ordersListPanel.add(emptyStatePanel);
     } else {
-        // Add order buttons
+  
         for (OrderData order : orders) {
             JPanel orderBtn = createOrderButton(order);
             ordersListPanel.add(orderBtn);
@@ -586,7 +585,7 @@ public class Cashier extends JFrame {
         }
     }
     
-    // Reset order details to default
+  
     orderIDLabel.setText("<html><b>ORDER #:</b> ---</html>");
     customerLabel.setText("<html><b>CUSTOMER:</b> Select an order</html>");
     itemLabel.setText("<html><b>ITEM:</b> ---</html>");
@@ -618,7 +617,7 @@ public class Cashier extends JFrame {
     private void loadOrders() {
         orders.clear();
         try {
-            // Load orders with category from Menu table
+          
             String query = "SELECT o.orderID, o.item, o.price, o.quantity, o.userID, o.status, " +
                           "u.username, m.category " +
                           "FROM Orders o " +
@@ -652,14 +651,14 @@ public class Cashier extends JFrame {
         } catch (Exception e) {
             System.err.println("Error loading orders: " + e.getMessage());
             e.printStackTrace();
-            // Add sample data if database fails
+
             orders.add(new OrderData(101, 1, "Alex", "Strawberry Cake", "Pastry", 120.0, 2, "Calculating Total"));
             orders.add(new OrderData(102, 2, "Sam", "Vanilla Latte", "Coffee", 85.0, 1, "Calculating Total"));
             orders.add(new OrderData(103, 3, "Jamie", "Green Tea", "Tea", 65.0, 1, "Calculating Total"));
         }
     }
 
-    // Inner class for order data
+   
     class OrderData {
         int id;
         int userID;
@@ -688,7 +687,7 @@ public class Cashier extends JFrame {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        // Use the parameterized constructor so a default user context is provided.
+     
         SwingUtilities.invokeLater(() -> new Cashier(0, "Guest"));
     }
 }

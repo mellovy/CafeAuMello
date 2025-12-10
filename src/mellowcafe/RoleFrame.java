@@ -11,8 +11,7 @@ public class RoleFrame extends JFrame {
     private String username;
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(RoleFrame.class.getName());
-    
-    // Pastel colors matching Cashier aesthetic
+
     private final Color SOFT_PINK = new Color(255, 160, 190);
     private final Color LIGHT_PINK = new Color(255, 244, 248);
     private final Color CREAM_WHITE = new Color(252, 253, 255);
@@ -24,11 +23,10 @@ public class RoleFrame extends JFrame {
     private JPanel selectedCard = null;
 
     public RoleFrame(int userID, String username) {
-        // FIXED: Store user info properly
+
         this.userID = userID;
         this.username = username;
-        
-        // Debug log to verify username
+
         System.out.println("RoleFrame initialized with userID: " + userID + ", username: " + username);
         
         setTitle("Cafe Au Mello - Pick Role");
@@ -36,8 +34,7 @@ public class RoleFrame extends JFrame {
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
-        
-        // Main panel with gradient background
+
         JPanel mainPanel = new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
@@ -51,12 +48,10 @@ public class RoleFrame extends JFrame {
         };
         mainPanel.setLayout(new BorderLayout());
         add(mainPanel);
-        
-        // Header
+
         JPanel header = createHeader();
         mainPanel.add(header, BorderLayout.NORTH);
-        
-        // Center content with role cards
+
         JPanel centerPanel = new JPanel();
         centerPanel.setOpaque(false);
         centerPanel.setLayout(new BorderLayout());
@@ -66,8 +61,7 @@ public class RoleFrame extends JFrame {
         centerPanel.add(cardsPanel, BorderLayout.CENTER);
         
         mainPanel.add(centerPanel, BorderLayout.CENTER);
-        
-        // Bottom panel with back button
+
         JPanel bottomPanel = createBottomPanel();
         mainPanel.add(bottomPanel, BorderLayout.SOUTH);
         
@@ -119,23 +113,21 @@ public class RoleFrame extends JFrame {
         gbc.weighty = 1;
         gbc.insets = new Insets(0, 15, 0, 15);
         gbc.fill = GridBagConstraints.BOTH;
-        
-        // Customer card - FIXED: Pass userID and username properly
+
         JPanel customerCard = createRoleCard(
             "CUSTOMER", 
             "/mellowcafe/customer.png",
             "Order delicious treats",
             SOFT_PINK,
             () -> {
-                // Debug log before navigation
+
                 System.out.println("Navigating to Customer with userID: " + userID + ", username: " + username);
                 new Customer(userID, username).setVisible(true);
                 this.dispose();
             }
         );
         container.add(customerCard, gbc);
-        
-        // Cashier card - FIXED: Pass username if needed
+
         gbc.gridx = 1;
         JPanel cashierCard = createRoleCard(
             "CASHIER",
@@ -143,14 +135,13 @@ public class RoleFrame extends JFrame {
             "Process orders & payments",
             ACCENT_BLUE,
             () -> {
-                // If Cashier needs username, pass it here
+
                 new Cashier(userID, username).setVisible(true);
                 this.dispose();
             }
         );
         container.add(cashierCard, gbc);
-        
-        // Barista card
+
         gbc.gridx = 2;
         JPanel baristaCard = createRoleCard(
             "BARISTA",
@@ -174,12 +165,10 @@ public class RoleFrame extends JFrame {
                 super.paintComponent(g);
                 Graphics2D g2d = (Graphics2D) g;
                 g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                
-                // Card background
+
                 g2d.setColor(LIGHT_PINK);
                 g2d.fillRoundRect(0, 0, getWidth(), getHeight(), 20, 20);
-                
-                // Accent color top bar
+
                 g2d.setColor(accentColor);
                 g2d.fillRoundRect(0, 0, getWidth(), 8, 20, 20);
             }
@@ -193,8 +182,7 @@ public class RoleFrame extends JFrame {
         ));
         card.setPreferredSize(new Dimension(280, 420));
         card.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        
-        // Icon panel
+
         JPanel iconPanel = new JPanel();
         iconPanel.setLayout(new BorderLayout());
         iconPanel.setOpaque(false);
@@ -208,8 +196,7 @@ public class RoleFrame extends JFrame {
         } catch (Exception e) {
             System.err.println("Could not load icon: " + iconPath);
         }
-        
-        // Text panel
+
         JPanel textPanel = new JPanel();
         textPanel.setLayout(new BoxLayout(textPanel, BoxLayout.Y_AXIS));
         textPanel.setOpaque(false);
@@ -224,8 +211,7 @@ public class RoleFrame extends JFrame {
         descLabel.setFont(new Font("Century Gothic", Font.BOLD, 15));
         descLabel.setForeground(TEXT_PURPLE);
         descLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        
-        // Decorative divider
+
         JSeparator separator = new JSeparator();
         separator.setForeground(accentColor);
         separator.setMaximumSize(new Dimension(150, 2));
@@ -239,8 +225,7 @@ public class RoleFrame extends JFrame {
         
         card.add(iconPanel, BorderLayout.CENTER);
         card.add(textPanel, BorderLayout.SOUTH);
-        
-        // Hover animations
+
         card.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
@@ -268,8 +253,7 @@ public class RoleFrame extends JFrame {
         
         return card;
     }
-    
-    // UPDATED METHOD - Added Friends button on the right side
+
     private JPanel createBottomPanel() {
         JPanel panel = new JPanel();
         panel.setBackground(CREAM_WHITE);
@@ -278,8 +262,7 @@ public class RoleFrame extends JFrame {
             BorderFactory.createEmptyBorder(20, 20, 20, 20)
         ));
         panel.setLayout(new BorderLayout());
-        
-        // Left side - Back button
+
         JPanel leftPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         leftPanel.setOpaque(false);
         
@@ -289,8 +272,7 @@ public class RoleFrame extends JFrame {
             this.dispose();
         });
         leftPanel.add(backBtn);
-        
-        // Right side - Friends button
+
         JPanel rightPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         rightPanel.setOpaque(false);
         

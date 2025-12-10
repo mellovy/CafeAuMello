@@ -9,7 +9,6 @@ public class LoginFrame extends JFrame {
 
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(LoginFrame.class.getName());
 
-    // Color palette
     private static final Color SOFT_PINK = new Color(255, 160, 190);
     private static final Color LIGHT_PINK = new Color(255, 244, 248);
     private static final Color SOFT_BLUE = new Color(229, 244, 255);
@@ -35,7 +34,6 @@ public class LoginFrame extends JFrame {
         setPreferredSize(new Dimension(550, 550));
         setResizable(false);
 
-        // Main panel with gradient background
         JPanel mainPanel = new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
@@ -49,7 +47,6 @@ public class LoginFrame extends JFrame {
         };
         mainPanel.setLayout(new GridBagLayout());
 
-        // Center card panel
         JPanel cardPanel = new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
@@ -108,7 +105,6 @@ public class LoginFrame extends JFrame {
         logoLabel.setMaximumSize(new Dimension(300, 300));
         logoLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // Username field
         JPanel usernamePanel = createInputPanel();
         JLabel userIcon = new JLabel("👤");
         userIcon.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 16));
@@ -122,7 +118,6 @@ public class LoginFrame extends JFrame {
         usernamePanel.add(userIcon, BorderLayout.WEST);
         usernamePanel.add(usernameField, BorderLayout.CENTER);
 
-        // Password field
         JPanel passwordPanel = createInputPanel();
         JLabel lockIcon = new JLabel("🔒");
         lockIcon.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 16));
@@ -154,7 +149,6 @@ public class LoginFrame extends JFrame {
         passwordPanel.add(passwordField, BorderLayout.CENTER);
         passwordPanel.add(showPasswordBtn, BorderLayout.EAST);
 
-        // Login button
         loginButton = new JButton("LOGIN") {
             @Override
             protected void paintComponent(Graphics g) {
@@ -184,7 +178,6 @@ public class LoginFrame extends JFrame {
         loginButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         loginButton.addActionListener(e -> handleLogin());
 
-        // Register link
         registerLabel = new JLabel("Don't have an account? Sign Up!");
         registerLabel.setFont(new Font("Segoe UI", Font.PLAIN, 11));
         registerLabel.setForeground(ACCENT_BLUE);
@@ -210,7 +203,6 @@ public class LoginFrame extends JFrame {
             }
         });
 
-        // Add components
         cardPanel.add(logoLabel);
         cardPanel.add(Box.createVerticalStrut(30));
         cardPanel.add(usernamePanel);
@@ -272,17 +264,14 @@ public class LoginFrame extends JFrame {
             rs = pstmt.executeQuery();
 
             if (rs.next()) {
-                // FIXED: Properly retrieve and pass user information
+
                 int loggedInUserID = rs.getInt("userID");  
                 String loggedInUsername = rs.getString("username");
 
-                // Debug log
                 System.out.println("Login successful - UserID: " + loggedInUserID + ", Username: " + loggedInUsername);
 
-                // Close current frame first
                 dispose();
 
-                // Open RoleFrame with proper user info
                 SwingUtilities.invokeLater(() -> {
                     RoleFrame roleFrame = new RoleFrame(loggedInUserID, loggedInUsername);
                     roleFrame.setVisible(true);

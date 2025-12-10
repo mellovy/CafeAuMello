@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 public class Customer extends JFrame {
 
-    // UI Elements
+ 
     private JPanel menuPanel;
     private JPanel sidebarPanel;
     private JButton toggleSidebarBtn;
@@ -18,11 +18,11 @@ public class Customer extends JFrame {
     private ArrayList<MenuItem> menuItems = new ArrayList<>();
     private ArrayList<CustomerOrder> customerOrders = new ArrayList<>();
     private String customerName = "Guest";
-    private int currentUserID = 1; // Should be passed from login
+    private int currentUserID = 1; 
     private JComboBox<String> filterComboBox;
     private JPanel ordersContainer;
 
-    // Pastel colors with gamified twist
+    
     private final Color SOFT_PINK = new Color(255, 160, 190);
     private final Color LIGHT_PINK = new Color(255, 244, 248);
     private final Color CREAM_WHITE = new Color(252, 253, 255);
@@ -33,7 +33,7 @@ public class Customer extends JFrame {
     private final Color PEACH = new Color(255, 218, 185);
     private final Color LAVENDER = new Color(230, 230, 250);
     private final Color BORDER_BLUE = new Color(110, 150, 180);
-    private final Color CALCULATING_COLOR = new Color(186, 85, 211); // purple-ish for calculating total
+    private final Color CALCULATING_COLOR = new Color(186, 85, 211); 
     
     private int userID;
     private String username;
@@ -64,35 +64,34 @@ public class Customer extends JFrame {
     JPanel header = createHeaderPanel();
     mainContainer.add(header, BorderLayout.NORTH);
 
-    // FIXED: Use OverlayLayout instead of JLayeredPane with fixed bounds
+
     JPanel contentPanel = new JPanel();
     contentPanel.setLayout(new OverlayLayout(contentPanel));
     mainContainer.add(contentPanel, BorderLayout.CENTER);
 
-    // Menu panel (base layer)
+
     JPanel menuContainer = createMenuPanel();
     menuContainer.setAlignmentX(0.0f);
     menuContainer.setAlignmentY(0.0f);
 
-    // Sidebar wrapper (overlay layer) - starts hidden off-screen
+
     final JPanel sidebarWrapper = new JPanel(new BorderLayout());
     sidebarWrapper.setOpaque(false);
     sidebarWrapper.setAlignmentX(0.0f);
     sidebarWrapper.setAlignmentY(0.0f);
-    
-    // Spacer to push sidebar to the right
+ 
     final JPanel spacer = new JPanel();
     spacer.setOpaque(false);
     spacer.setPreferredSize(new Dimension(Integer.MAX_VALUE, 0));
     
     sidebarPanel = createSidebar();
     sidebarPanel.setPreferredSize(new Dimension(400, 0));
-    sidebarPanel.setVisible(false); // Start hidden
+    sidebarPanel.setVisible(false); 
     
     sidebarWrapper.add(spacer, BorderLayout.CENTER);
     sidebarWrapper.add(sidebarPanel, BorderLayout.EAST);
 
-    // Toggle button wrapper (top layer)
+ 
     JPanel buttonWrapper = new JPanel(new BorderLayout());
     buttonWrapper.setOpaque(false);
     buttonWrapper.setAlignmentX(0.0f);
@@ -105,7 +104,7 @@ public class Customer extends JFrame {
     buttonPanel.add(toggleSidebarBtn);
     buttonWrapper.add(buttonPanel, BorderLayout.NORTH);
 
-    // Add layers in order (bottom to top)
+    
     contentPanel.add(buttonWrapper);
     contentPanel.add(sidebarWrapper);
     contentPanel.add(menuContainer);
@@ -114,7 +113,7 @@ public class Customer extends JFrame {
 }
 
     Customer() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs template
+        throw new UnsupportedOperationException("Not supported yet."); 
     }
 
     private JPanel createHeaderPanel() {
@@ -126,12 +125,12 @@ public class Customer extends JFrame {
             BorderFactory.createEmptyBorder(15, 20, 15, 20)
         ));
 
-        // Left side - back button + welcome message
+        
         JPanel leftPanel = new JPanel();
         leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.X_AXIS));
         leftPanel.setOpaque(false);
 
-        // Back button styled like Cashier's pixel button
+   
         JButton backBtn = createPixelButton("← Back", BORDER_BLUE);
             backBtn.setPreferredSize(new Dimension(220, 50));
             backBtn.setMinimumSize(new Dimension(220, 50));
@@ -146,7 +145,7 @@ public class Customer extends JFrame {
         leftPanel.add(backBtn);
         leftPanel.add(Box.createRigidArea(new Dimension(30, 0)));
 
-        // Welcome message panel
+        
         JPanel welcomePanel = new JPanel();
         welcomePanel.setLayout(new BoxLayout(welcomePanel, BoxLayout.Y_AXIS));
         welcomePanel.setOpaque(false);
@@ -167,7 +166,7 @@ public class Customer extends JFrame {
 
         header.add(leftPanel, BorderLayout.WEST);
 
-        // Right side - points/badges (gamification)
+       
         JPanel gamificationPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 15, 0));
         gamificationPanel.setOpaque(false);
 
@@ -203,16 +202,16 @@ public class Customer extends JFrame {
         JPanel container = new JPanel(new BorderLayout());
         container.setBackground(PASTEL_BLUE);
 
-        // Category Navigation Bar
+        
         JPanel categoryNavBar = createCategoryNavBar();
         container.add(categoryNavBar, BorderLayout.NORTH);
 
-        // Menu grid with padding
+       
         JPanel paddingWrapper = new JPanel(new BorderLayout());
         paddingWrapper.setBackground(PASTEL_BLUE);
         paddingWrapper.setBorder(BorderFactory.createEmptyBorder(10, 30, 10, 30));
 
-        // Add menu items from database (default: show all)
+  
         for (MenuItem item : menuItems) {
             JPanel itemCard = createMenuItemCard(item);
             menuPanel.add(itemCard);
@@ -237,7 +236,7 @@ public class Customer extends JFrame {
             BorderFactory.createEmptyBorder(10, 20, 10, 20)
         ));
 
-        // Get unique categories from menu items
+      
         ArrayList<String> categories = new ArrayList<>();
         categories.add("All");
         for (MenuItem item : menuItems) {
@@ -246,14 +245,13 @@ public class Customer extends JFrame {
             }
         }
 
-        // Create category buttons
+    
         ButtonGroup buttonGroup = new ButtonGroup();
         for (String category : categories) {
             JToggleButton categoryBtn = createCategoryButton(category);
             buttonGroup.add(categoryBtn);
             navBar.add(categoryBtn);
             
-            // Select "All" by default
             if (category.equals("All")) {
                 categoryBtn.setSelected(true);
             }
@@ -274,7 +272,7 @@ public class Customer extends JFrame {
         ));
         btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-        // Style when selected
+
         btn.addItemListener(e -> {
             if (btn.isSelected()) {
                 btn.setBackground(SOFT_PINK);
@@ -286,7 +284,7 @@ public class Customer extends JFrame {
             }
         });
 
-        // Hover effect
+
         btn.addMouseListener(new MouseAdapter() {
             public void mouseEntered(MouseEvent e) {
                 if (!btn.isSelected()) {
@@ -328,7 +326,7 @@ public class Customer extends JFrame {
         card.setPreferredSize(new Dimension(300, 380));
         card.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-        // Hover effect
+
         card.addMouseListener(new MouseAdapter() {
             public void mouseEntered(MouseEvent e) {
                 card.setBackground(LIGHT_PINK);
@@ -346,7 +344,7 @@ public class Customer extends JFrame {
             }
         });
 
-        // Image panel
+       
         JPanel imagePanel = new JPanel(new BorderLayout());
         imagePanel.setOpaque(false);
         imagePanel.setPreferredSize(new Dimension(250, 180));
@@ -364,7 +362,7 @@ public class Customer extends JFrame {
             imagePanel.add(placeholderLabel, BorderLayout.CENTER);
         }
 
-        // Category badge
+     
         JLabel categoryBadge = new JLabel(item.category);
         categoryBadge.setFont(new Font("Century Gothic", Font.BOLD, 11));
         categoryBadge.setForeground(Color.WHITE);
@@ -377,7 +375,7 @@ public class Customer extends JFrame {
         badgeWrapper.setOpaque(false);
         badgeWrapper.add(categoryBadge);
 
-        // Info panel
+   
         JPanel infoPanel = new JPanel();
         infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
         infoPanel.setOpaque(false);
@@ -396,7 +394,7 @@ public class Customer extends JFrame {
         infoPanel.add(Box.createRigidArea(new Dimension(0, 5)));
         infoPanel.add(priceLabel);
 
-        // Order button
+
         JButton orderBtn = new JButton("Add to Order");
         orderBtn.setFont(new Font("Century Gothic", Font.BOLD, 14));
         orderBtn.setBackground(ACCENT_BLUE);
@@ -439,7 +437,7 @@ public class Customer extends JFrame {
             BorderFactory.createEmptyBorder(20, 20, 20, 20)
         ));
 
-        // Header
+     
         JPanel sidebarHeader = new JPanel(new BorderLayout());
         sidebarHeader.setOpaque(false);
 
@@ -447,7 +445,7 @@ public class Customer extends JFrame {
         ordersTitle.setFont(new Font("Century Gothic", Font.BOLD, 22));
         ordersTitle.setForeground(SOFT_PINK);
 
-        // Filter dropdown
+    
         JPanel filterPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 5));
         filterPanel.setOpaque(false);
         
@@ -455,7 +453,7 @@ public class Customer extends JFrame {
         filterLabel.setFont(new Font("Century Gothic", Font.PLAIN, 14));
         filterLabel.setForeground(TEXT_PURPLE);
 
-        // Add "Cancelled" filter
+       
         String[] filters = {"All Orders", "Calculating Total", "Preparing", "Pending Payment", "Completed", "Cancelled"};
         filterComboBox = new JComboBox<>(filters);
         filterComboBox.setFont(new Font("Century Gothic", Font.PLAIN, 13));
@@ -471,7 +469,7 @@ public class Customer extends JFrame {
 
         sidebar.add(sidebarHeader, BorderLayout.NORTH);
 
-        // Orders list
+
         ordersContainer = new JPanel();
         ordersContainer.setLayout(new BoxLayout(ordersContainer, BoxLayout.Y_AXIS));
         ordersContainer.setBackground(CREAM_WHITE);
@@ -546,7 +544,7 @@ public class Customer extends JFrame {
         ));
         card.setMaximumSize(new Dimension(Integer.MAX_VALUE, 150));
 
-        // Left: Icon
+   
         JPanel iconPanel = new JPanel(new BorderLayout());
         iconPanel.setOpaque(false);
         iconPanel.setPreferredSize(new Dimension(60, 60));
@@ -563,7 +561,7 @@ public class Customer extends JFrame {
             iconPanel.add(emoji, BorderLayout.CENTER);
         }
 
-        // Center: Details
+   
         JPanel detailsPanel = new JPanel();
         detailsPanel.setLayout(new BoxLayout(detailsPanel, BoxLayout.Y_AXIS));
         detailsPanel.setOpaque(false);
@@ -595,15 +593,15 @@ public class Customer extends JFrame {
         card.add(iconPanel, BorderLayout.WEST);
         card.add(detailsPanel, BorderLayout.CENTER);
 
-        // Right: Action buttons
+      
         JPanel actionPanel = new JPanel();
         actionPanel.setOpaque(false);
         actionPanel.setLayout(new BoxLayout(actionPanel, BoxLayout.Y_AXIS));
 
-        int buttonWidth = 80;  // fixed width for both buttons
-int buttonHeight = 30; // fixed height
+        int buttonWidth = 80;  
+int buttonHeight = 30; 
 
-// Pay button (only for pending payment)
+
 if ("Pending Payment".equalsIgnoreCase(order.status)) {
     JButton payBtn = new JButton("Pay");
     payBtn.setFont(new Font("Century Gothic", Font.BOLD, 12));
@@ -613,7 +611,7 @@ if ("Pending Payment".equalsIgnoreCase(order.status)) {
     payBtn.setBorder(BorderFactory.createEmptyBorder(8, 15, 8, 15));
     payBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-    // Set same size
+
     payBtn.setPreferredSize(new Dimension(buttonWidth, buttonHeight));
     payBtn.setMaximumSize(new Dimension(buttonWidth, buttonHeight));
     payBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -623,7 +621,7 @@ if ("Pending Payment".equalsIgnoreCase(order.status)) {
     actionPanel.add(Box.createRigidArea(new Dimension(0, 5)));
 }
 
-// Cancel button (if not preparing or completed)
+
 if (!order.status.equalsIgnoreCase("Preparing") && !order.status.equalsIgnoreCase("Completed") && !order.status.equalsIgnoreCase("Cancelled")) {
     JButton cancelBtn = new JButton("Cancel");
     cancelBtn.setFont(new Font("Century Gothic", Font.BOLD, 12));
@@ -633,7 +631,7 @@ if (!order.status.equalsIgnoreCase("Preparing") && !order.status.equalsIgnoreCas
     cancelBtn.setBorder(BorderFactory.createEmptyBorder(8, 15, 8, 15));
     cancelBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-    // Set same size
+
     cancelBtn.setPreferredSize(new Dimension(buttonWidth, buttonHeight));
     cancelBtn.setMaximumSize(new Dimension(buttonWidth, buttonHeight));
     cancelBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -697,7 +695,7 @@ if (!order.status.equalsIgnoreCase("Preparing") && !order.status.equalsIgnoreCas
 
         if (confirm == JOptionPane.YES_OPTION) {
             try {
-                // Deduct points
+               
                 String deductPoints = "UPDATE Users SET points = points - ? WHERE userID = ?";
                 PreparedStatement pstmt1 = con.prepareStatement(deductPoints);
                 pstmt1.setInt(1, (int) order.totalPrice);
@@ -705,7 +703,7 @@ if (!order.status.equalsIgnoreCase("Preparing") && !order.status.equalsIgnoreCas
                 pstmt1.executeUpdate();
                 pstmt1.close();
 
-                // Update order status
+            
                 String updateQuery = "UPDATE Orders SET status = 'Preparing' WHERE orderID = ?";
                 PreparedStatement pstmt2 = con.prepareStatement(updateQuery);
                 pstmt2.setInt(1, order.orderID);
@@ -774,7 +772,7 @@ if (!order.status.equalsIgnoreCase("Preparing") && !order.status.equalsIgnoreCas
 
     private void toggleSidebar() {
     if (sidebarVisible) {
-        // Hide sidebar with fade-out effect
+     
         Timer timer = new Timer(10, null);
         timer.addActionListener(new ActionListener() {
             float alpha = 1.0f;
@@ -792,7 +790,7 @@ if (!order.status.equalsIgnoreCase("Preparing") && !order.status.equalsIgnoreCas
         });
         timer.start();
     } else {
-        // Show sidebar with fade-in effect
+       
         sidebarPanel.setVisible(true);
         sidebarVisible = true;
         toggleSidebarBtn.setText("✕");
@@ -855,7 +853,7 @@ if (!order.status.equalsIgnoreCase("Preparing") && !order.status.equalsIgnoreCas
             pstmt.setString(3, item.name);
             pstmt.setDouble(4, item.price);
             pstmt.setInt(5, quantity);
-            pstmt.setDouble(6, 0.00); // Will be calculated by cashier
+            pstmt.setDouble(6, 0.00);  
             pstmt.setString(7, "Calculating Total");
 
             int rowsAffected = pstmt.executeUpdate();

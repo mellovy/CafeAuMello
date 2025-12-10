@@ -13,8 +13,7 @@ import java.time.Duration;
 public class FriendsFrame extends JFrame {
     private int userID;
     private String username;
-    
-    // Pastel colors matching your app aesthetic
+
     private final Color SOFT_PINK = new Color(255, 160, 190);
     private final Color LIGHT_PINK = new Color(255, 244, 248);
     private final Color CREAM_WHITE = new Color(252, 253, 255);
@@ -33,8 +32,7 @@ public class FriendsFrame extends JFrame {
     private JList<String> searchResultsList;
     private DefaultListModel<String> searchListModel;
     private Timer activityTimer;
-    
-    // Database connection info
+
     private static final String DB_URL = "jdbc:mysql://localhost:3307/s22100684_CafeAuMello";
     private static final String DB_USER = "s22100684_CafeAuMello";
     private static final String DB_PASS = "LilMochi06";
@@ -48,8 +46,7 @@ public class FriendsFrame extends JFrame {
         setLocationRelativeTo(null);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout());
-        
-        // Main panel with gradient background
+
         JPanel mainPanel = new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
@@ -63,34 +60,27 @@ public class FriendsFrame extends JFrame {
         };
         mainPanel.setLayout(new BorderLayout());
         add(mainPanel);
-        
-        // Header
+
         JPanel header = createHeader();
         mainPanel.add(header, BorderLayout.NORTH);
-        
-        // Center content with tabs
+
         JTabbedPane tabbedPane = createTabbedPane();
         mainPanel.add(tabbedPane, BorderLayout.CENTER);
-        
-        // Bottom panel with back button
+
         JPanel bottomPanel = createBottomPanel();
         mainPanel.add(bottomPanel, BorderLayout.SOUTH);
-        
-        // Load initial data
+
         loadFriendsList();
         loadPendingRequests();
-        
-        // Update user's own last_active timestamp
+
         updateUserActivity();
-        
-        // Auto-refresh every 30 seconds to show updated activity status
+
         activityTimer = new Timer(30000, e -> {
             updateUserActivity();
             loadFriendsList();
         });
         activityTimer.start();
-        
-        // Update activity on window close
+
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -153,16 +143,13 @@ public class FriendsFrame extends JFrame {
         JTabbedPane tabbedPane = new JTabbedPane();
         tabbedPane.setFont(new Font("Century Gothic", Font.BOLD, 14));
         tabbedPane.setBackground(CREAM_WHITE);
-        
-        // Friends List Tab
+
         JPanel friendsPanel = createFriendsPanel();
         tabbedPane.addTab("My Friends", friendsPanel);
-        
-        // Friend Requests Tab
+
         JPanel requestsPanel = createRequestsPanel();
         tabbedPane.addTab("Friend Requests", requestsPanel);
-        
-        // Add Friends Tab
+
         JPanel addFriendsPanel = createAddFriendsPanel();
         tabbedPane.addTab("Add Friends", addFriendsPanel);
         
@@ -173,8 +160,7 @@ public class FriendsFrame extends JFrame {
         JPanel panel = new JPanel(new BorderLayout(10, 10));
         panel.setOpaque(false);
         panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-        
-        // Friends table with status column
+
         String[] columnNames = {"Friend", "Status", "Since", "Points"};
         friendsTableModel = new DefaultTableModel(columnNames, 0) {
             @Override
@@ -187,8 +173,7 @@ public class FriendsFrame extends JFrame {
             @Override
             public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
                 Component c = super.prepareRenderer(renderer, row, column);
-                
-                // Color the Status column based on online/offline
+
                 if (column == 1) {
                     String status = (String) getValueAt(row, column);
                     if (status.contains("●")) {
@@ -217,8 +202,7 @@ public class FriendsFrame extends JFrame {
         JScrollPane scrollPane = new JScrollPane(friendsTable);
         scrollPane.setBorder(BorderFactory.createLineBorder(BORDER_BLUE, 2));
         panel.add(scrollPane, BorderLayout.CENTER);
-        
-        // Button panel
+
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         buttonPanel.setOpaque(false);
         
@@ -239,8 +223,7 @@ public class FriendsFrame extends JFrame {
         JPanel panel = new JPanel(new BorderLayout(10, 10));
         panel.setOpaque(false);
         panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-        
-        // Requests table
+
         String[] columnNames = {"Username", "Request Date"};
         requestsTableModel = new DefaultTableModel(columnNames, 0) {
             @Override
@@ -260,8 +243,7 @@ public class FriendsFrame extends JFrame {
         JScrollPane scrollPane = new JScrollPane(requestsTable);
         scrollPane.setBorder(BorderFactory.createLineBorder(BORDER_BLUE, 2));
         panel.add(scrollPane, BorderLayout.CENTER);
-        
-        // Button panel
+
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         buttonPanel.setOpaque(false);
         
@@ -286,8 +268,7 @@ public class FriendsFrame extends JFrame {
         JPanel panel = new JPanel(new BorderLayout(15, 15));
         panel.setOpaque(false);
         panel.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
-        
-        // Search panel with card design
+
         JPanel searchCard = new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
@@ -304,8 +285,7 @@ public class FriendsFrame extends JFrame {
             BorderFactory.createLineBorder(SOFT_PINK, 2),
             BorderFactory.createEmptyBorder(20, 25, 20, 25)
         ));
-        
-        // Title with icon
+
         JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
         titlePanel.setOpaque(false);
         
@@ -319,8 +299,7 @@ public class FriendsFrame extends JFrame {
         titlePanel.add(iconLabel);
         titlePanel.add(titleLabel);
         searchCard.add(titlePanel, BorderLayout.NORTH);
-        
-        // Search input panel
+
         JPanel searchInputPanel = new JPanel(new BorderLayout(10, 0));
         searchInputPanel.setOpaque(false);
         
@@ -331,8 +310,7 @@ public class FriendsFrame extends JFrame {
             BorderFactory.createEmptyBorder(12, 15, 12, 15)
         ));
         searchField.setBackground(Color.WHITE);
-        
-        // Add Enter key listener
+
         searchField.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
@@ -352,8 +330,7 @@ public class FriendsFrame extends JFrame {
         searchCard.add(searchInputPanel, BorderLayout.CENTER);
         
         panel.add(searchCard, BorderLayout.NORTH);
-        
-        // Results panel with custom list rendering
+
         JPanel resultsPanel = new JPanel(new BorderLayout(0, 10));
         resultsPanel.setOpaque(false);
         
@@ -362,8 +339,7 @@ public class FriendsFrame extends JFrame {
         resultsLabel.setForeground(TEXT_PURPLE);
         resultsLabel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         resultsPanel.add(resultsLabel, BorderLayout.NORTH);
-        
-        // Custom cell renderer for prettier list items
+
         searchListModel = new DefaultListModel<>();
         searchResultsList = new JList<>(searchListModel);
         searchResultsList.setFont(new Font("Century Gothic", Font.PLAIN, 14));
@@ -383,8 +359,7 @@ public class FriendsFrame extends JFrame {
         resultsPanel.add(scrollPane, BorderLayout.CENTER);
         
         panel.add(resultsPanel, BorderLayout.CENTER);
-        
-        // Add friend button
+
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
         buttonPanel.setOpaque(false);
         
@@ -397,8 +372,7 @@ public class FriendsFrame extends JFrame {
         
         return panel;
     }
-    
-    // Custom cell renderer for user list
+
     private class UserListCellRenderer extends DefaultListCellRenderer {
         @Override
         public Component getListCellRendererComponent(JList<?> list, Object value, 
@@ -415,8 +389,7 @@ public class FriendsFrame extends JFrame {
             }
             
             String text = value.toString();
-            
-            // Handle "No users found" message
+
             if (text.contains("No users found")) {
                 JLabel label = new JLabel(text);
                 label.setFont(new Font("Century Gothic", Font.ITALIC, 14));
@@ -424,15 +397,13 @@ public class FriendsFrame extends JFrame {
                 panel.add(label, BorderLayout.CENTER);
                 return panel;
             }
-            
-            // Parse user info
+
             String[] parts = text.split(" - ");
             if (parts.length < 2) return panel;
             
             String username = parts[0];
             String remaining = parts[1];
-            
-            // Extract status, points, and friendship status
+
             String status = "";
             String points = "";
             String friendshipStatus = "";
@@ -458,8 +429,7 @@ public class FriendsFrame extends JFrame {
             }
             
             friendshipStatus = remaining;
-            
-            // Left side - Username and status
+
             JPanel leftPanel = new JPanel();
             leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
             leftPanel.setOpaque(false);
@@ -483,8 +453,7 @@ public class FriendsFrame extends JFrame {
             leftPanel.add(statusLabel);
             
             panel.add(leftPanel, BorderLayout.CENTER);
-            
-            // Right side - Friendship status badge
+
             if (!friendshipStatus.isEmpty()) {
                 JLabel badgeLabel = new JLabel(friendshipStatus);
                 badgeLabel.setFont(new Font("Century Gothic", Font.BOLD, 11));
@@ -684,11 +653,9 @@ public class FriendsFrame extends JFrame {
             JOptionPane.showMessageDialog(this, "You already have a relationship with this user.");
             return;
         }
-        
-        // Extract username from display text (before the first dash)
+
         String targetUsername = selected.split(" - ")[0];
-        
-        // Get target userID
+
         String getUserQuery = "SELECT userID FROM Users WHERE username = ?";
         
         try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
@@ -699,8 +666,7 @@ public class FriendsFrame extends JFrame {
             
             if (rs.next()) {
                 int targetUserID = rs.getInt("userID");
-                
-                // Insert friend request
+
                 String insertQuery = "INSERT INTO friendships (userID, friendID, status) VALUES (?, ?, 'pending')";
                 try (PreparedStatement insertStmt = conn.prepareStatement(insertQuery)) {
                     insertStmt.setInt(1, userID);

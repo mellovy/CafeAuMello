@@ -21,15 +21,15 @@ public class BaristaGame extends JFrame {
     private int userID;
     private String username;
 
-    // Game state
+
     private ArrayList<Order> activeOrders = new ArrayList<>();
     private int currentPoints = 0;
 
-    // Current order being prepared
+
     private Order currentOrder;
     private ArrayList<String> currentIngredients = new ArrayList<>();
 
-    // Pastel colors matching your theme
+
     private final Color SOFT_PINK = new Color(255, 160, 190);
     private final Color LIGHT_PINK = new Color(255, 244, 248);
     private final Color CREAM_WHITE = new Color(252, 253, 255);
@@ -41,7 +41,7 @@ public class BaristaGame extends JFrame {
     private final Color LAVENDER = new Color(230, 230, 250);
     private final Color SOFT_RED = new Color(255, 150, 150);
 
-    // UI Components
+ 
     private JLabel scoreLabel;
     private JPanel ordersPanel;
     private JPanel workstationPanel;
@@ -62,9 +62,9 @@ public class BaristaGame extends JFrame {
 
     connectDB();
     loadCurrentPoints();
-    initializeUI();           // Create UI first
-    loadPendingOrders();      // Then load orders
-    updateHeaderAfterLoad();  // Then update header
+    initializeUI();          
+    loadPendingOrders();      
+    updateHeaderAfterLoad();  
 
     setVisible(true);
 }
@@ -121,7 +121,6 @@ private JPanel createHeader() {
     titleLabel.setForeground(SOFT_RED);
     titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-    // Timer display
     timerLabel = new JLabel("Time: " + timeRemaining + "s");
     timerLabel.setFont(new Font("Century Gothic", Font.BOLD, 24));
     timerLabel.setForeground(ACCENT_BLUE);
@@ -147,7 +146,7 @@ private JPanel createHeader() {
         centerPanel.add(timerBar);
     }
 
-    // Right panel with stats
+ 
     JPanel rightPanel = new JPanel();
     rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
     rightPanel.setOpaque(false);
@@ -197,7 +196,7 @@ private void updateGameTitle() {
                 JPanel centerPanel = (JPanel) centerComp;
                 Component[] centerComps = centerPanel.getComponents();
                 
-                // Update title and show/hide progress bar
+             
                 for (Component comp : centerComps) {
                     if (comp instanceof JLabel) {
                         JLabel label = (JLabel) comp;
@@ -208,7 +207,7 @@ private void updateGameTitle() {
                     }
                 }
                 
-                // Show/hide progress bar
+               
                 boolean hasProgressBar = false;
                 for (Component comp : centerComps) {
                     if (comp instanceof JProgressBar) {
@@ -275,11 +274,10 @@ private void startTimer() {
         timerLabel.setText("Time: " + timeRemaining + "s");
         timerBar.setValue(timeRemaining);
         
-        // Color changes based on urgency
-        if (timeRemaining <= 5) {  // Adjust for 20 second timer
+        if (timeRemaining <= 5) {  // 
             timerBar.setForeground(SOFT_RED);
             timerLabel.setForeground(SOFT_RED);
-        } else if (timeRemaining <= 10) {  // Adjust for 20 second timer
+        } else if (timeRemaining <= 10) {  // 
             timerBar.setForeground(new Color(255, 200, 100));
             timerLabel.setForeground(new Color(255, 140, 0));
         }
@@ -307,7 +305,7 @@ private void endGame() {
         new String[]{"Play Again", "Main Menu"}, "Play Again");
     
     if (choice == 0) {
-        // Reset game
+     
         this.dispose();
         new BaristaGame(userID, username);
     } else {
@@ -624,7 +622,7 @@ private void loadPendingOrders() {
         ordersPanel.revalidate();
         ordersPanel.repaint();
         
-        // Only show "cafe empty" message when first opening the game
+       
         if (activeOrders.isEmpty()) {
             SwingUtilities.invokeLater(() -> showEmptyCafeMessage());
         }
@@ -857,12 +855,12 @@ private void loadPendingOrders() {
         ordersPanel.revalidate();
         ordersPanel.repaint();
         
-        // Stop the timer when all orders are done
+    
         if (orderTimer != null) {
             orderTimer.stop();
         }
         
-        // Show different message when finishing all orders during game
+      
         SwingUtilities.invokeLater(() -> 
             JOptionPane.showMessageDialog(this, 
                 "🎉 All orders completed! 🎉\n\nWaiting for more orders to prepare!",
